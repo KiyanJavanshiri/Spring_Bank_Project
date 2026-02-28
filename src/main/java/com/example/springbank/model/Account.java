@@ -3,6 +3,7 @@ package com.example.springbank.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -71,5 +72,28 @@ public class Account {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(id, account.id) && Objects.equals(number, account.number) && currency == account.currency && Objects.equals(balance, account.balance) && Objects.equals(customer, account.customer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number, currency, balance, customer);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", currency=" + currency +
+                ", balance=" + balance +
+                ", customer=" + customer +
+                '}';
     }
 }
