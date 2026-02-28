@@ -19,11 +19,11 @@ import java.util.Objects;
 @RequestMapping("/customers")
 public class CustomerController {
     private CustomerService customerService;
-    private AccountService accountService;
+//    private AccountService accountService;
 
-    public CustomerController(CustomerService customerService, AccountService accountService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.accountService = accountService;
+//        this.accountService = accountService;
     }
 
     @GetMapping
@@ -48,9 +48,18 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Account> createAccount(@PathVariable long id, @RequestBody RequestCustomerCreateAccount body) {
-        Account account = accountService.createAccount(id, body.getCurrency());
-        return ResponseEntity.ok(account);
+    @PostMapping("/{id}/account")
+    public ResponseEntity<String> createAccount(@PathVariable long id, @RequestBody RequestCustomerCreateAccount body) {
+//        Account account = accountService.createAccount(id, body.getCurrency());
+        Customer customer = customerService.getCustomer(id);
+
+        if(customer == null) {
+            return ResponseEntity.badRequest().body("customer was not found");
+        }
+
+        customer.addAccount(new Account(body.getCurrency(), customer));
+        customerService.saveCustomer(customer);
+
+        return ResponseEntity.ok("Account created");
     }
 }

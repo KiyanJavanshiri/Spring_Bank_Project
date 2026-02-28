@@ -1,5 +1,6 @@
 package com.example.springbank.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 
@@ -7,12 +8,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
+@Table(name = "accounts")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Positive
     private String number;
 
     @Enumerated(EnumType.STRING)
@@ -21,8 +22,9 @@ public class Account {
 
     private Double balance;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
     public Account() {}
@@ -89,11 +91,10 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "id=" + id +
+                "balance=" + balance +
+                ", currency=" + currency +
                 ", number='" + number + '\'' +
-                ", currency=" + currency.name() +
-                ", balance=" + balance +
-                ", customer=" + customer +
+                ", id=" + id +
                 '}';
     }
 }

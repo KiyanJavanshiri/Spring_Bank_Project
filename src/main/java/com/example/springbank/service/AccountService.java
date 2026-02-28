@@ -20,15 +20,15 @@ public class AccountService {
         this.customerRepository = customerRepository;
     }
 
-    public Account createAccount(long customerId, Currency currency) {
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-
-        if(customer == null) return null;
-
-        Account newAccount = new Account(currency, customer);
-
-        customer.addAccount(newAccount);
-
-        return newAccount;
-    }
+//    public Account createAccount(long customerId, Currency currency) {
+//        Customer customer = customerRepository.findById(customerId).orElse(null);
+//
+//        if(customer == null) return null;
+//
+//        Account newAccount = new Account(currency, customer);
+//
+//        customer.addAccount(newAccount);
+//
+//        return newAccount;
+//    }
 }

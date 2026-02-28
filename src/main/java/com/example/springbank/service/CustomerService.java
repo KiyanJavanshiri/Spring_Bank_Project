@@ -22,6 +22,7 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers() {
+        System.out.println("DB state: " + repository.findAll());
         return repository.findAll();
     }
 
@@ -33,6 +34,10 @@ public class CustomerService {
 
     public void deleteCustomer(long id) {
         repository.deleteById(id);
+    }
+
+    public void saveCustomer(Customer customer) {
+        repository.save(customer);
     }
 
 //    public void changeCustomerData(long id) {

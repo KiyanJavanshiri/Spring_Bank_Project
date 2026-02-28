@@ -1,5 +1,6 @@
 package com.example.springbank.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "customers")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,8 @@ public class Customer {
 
     private int age;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @JsonManagedReference
     private List<Account> accounts = new ArrayList<>();
 
     public Customer() {}
