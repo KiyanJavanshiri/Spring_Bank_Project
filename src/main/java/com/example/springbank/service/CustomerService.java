@@ -31,6 +31,10 @@ public class CustomerService {
         return customer;
     }
 
+    public void deleteCustomer(long id) {
+        repository.deleteById(id);
+    }
+
 //    public void changeCustomerData(long id) {
 //
 //    }

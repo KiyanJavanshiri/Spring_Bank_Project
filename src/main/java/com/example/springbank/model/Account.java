@@ -91,7 +91,7 @@ public class Account {
         return "Account{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
-                ", currency=" + currency +
+                ", currency=" + currency.name() +
                 ", balance=" + balance +
                 ", customer=" + customer +
                 '}';

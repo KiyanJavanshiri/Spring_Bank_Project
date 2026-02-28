@@ -28,6 +28,16 @@ public class Customer {
         this.age = age;
     }
 
+    public void addAccount(Account account) {
+        accounts.add(account);
+        account.setCustomer(this);
+    }
+
+    public void removeAccount(Account account) {
+        accounts.remove(account);
+        account.setCustomer(null);
+    }
+
     public Long getId() {
         return id;
     }
