@@ -22,7 +22,6 @@ public class CustomerService {
     }
 
     public List<Customer> getAllCustomers() {
-        System.out.println("DB state: " + repository.findAll());
         return repository.findAll();
     }
 

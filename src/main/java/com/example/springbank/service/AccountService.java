@@ -13,11 +13,19 @@ import java.util.Optional;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
-    private final CustomerRepository customerRepository;
+//    private final CustomerRepository customerRepository;
 
     public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository) {
         this.accountRepository = accountRepository;
-        this.customerRepository = customerRepository;
+//        this.customerRepository = customerRepository;
+    }
+
+    public Account getAccount(long id) {
+        return accountRepository.findById(id).orElse(null);
+    }
+
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 
 //    public Account createAccount(long customerId, Currency currency) {

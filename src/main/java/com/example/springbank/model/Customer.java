@@ -19,7 +19,7 @@ public class Customer {
 
     private int age;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
     @JsonManagedReference
     private List<Account> accounts = new ArrayList<>();
 

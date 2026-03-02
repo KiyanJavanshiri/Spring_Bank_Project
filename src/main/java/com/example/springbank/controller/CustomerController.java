@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/customers")
@@ -21,7 +18,7 @@ public class CustomerController {
     private CustomerService customerService;
 //    private AccountService accountService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, AccountService accountService) {
         this.customerService = customerService;
 //        this.accountService = accountService;
     }
@@ -50,7 +47,6 @@ public class CustomerController {
 
     @PostMapping("/{id}/account")
     public ResponseEntity<String> createAccount(@PathVariable long id, @RequestBody RequestCustomerCreateAccount body) {
-//        Account account = accountService.createAccount(id, body.getCurrency());
         Customer customer = customerService.getCustomer(id);
 
         if(customer == null) {
@@ -61,5 +57,28 @@ public class CustomerController {
         customerService.saveCustomer(customer);
 
         return ResponseEntity.ok("Account created");
+    }
+
+    @DeleteMapping("/{id}/account/{accountId}")
+    public ResponseEntity<String> deleteCustomerAccount(@PathVariable long id, @PathVariable long accountId) {
+        Customer customer = customerService.getCustomer(id);
+        if(customer == null) {
+            return ResponseEntity.status(404).body("Customer with id " + id + " was not found");
+        }
+
+        Account account = customer.getAccounts()
+                .stream()
+                .filter(a -> a.getId().equals(accountId))
+                .findFirst()
+                .orElse(null);
+
+        if(account == null) {
+            return ResponseEntity.status(404).body("Account with id " + accountId + " was not found for customer with id " + id);
+        }
+
+        customer.removeAccount(account);
+        customerService.saveCustomer(customer);
+
+        return ResponseEntity.noContent().build();
     }
 }
