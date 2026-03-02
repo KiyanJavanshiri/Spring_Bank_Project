@@ -11,7 +11,7 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    public AccountService(AccountRepository accountRepository, CustomerRepository customerRepository) {
+    public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -31,7 +31,7 @@ public class AccountService {
         }
 
         account.setBalance(account.getBalance() + sum);
-
+        accountRepository.save(account);
         return account;
     }
 
@@ -43,11 +43,25 @@ public class AccountService {
         }
 
         account.setBalance(account.getBalance() - sum);
-
+        accountRepository.save(account);
         return account;
     }
 
+    public boolean transfer(String from, String to, double sum) {
+        Account fromAcc = accountRepository.findByNumber(from).orElse(null);
+        Account toAcc = accountRepository.findByNumber(to).orElse(null);
 
+        if (fromAcc == null || toAcc == null) return false;
+        if (fromAcc.getBalance() < sum) return false;
+
+        fromAcc.setBalance(fromAcc.getBalance() - sum);
+        toAcc.setBalance(toAcc.getBalance() + sum);
+
+        accountRepository.save(fromAcc);
+        accountRepository.save(toAcc);
+
+        return true;
+    }
 
     public void saveAccount(Account account) {
         accountRepository.save(account);

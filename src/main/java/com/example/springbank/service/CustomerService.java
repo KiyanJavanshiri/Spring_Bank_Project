@@ -1,6 +1,7 @@
 package com.example.springbank.service;
 
 
+import com.example.springbank.controller.dto.RequestCustomerCreateBody;
 import com.example.springbank.model.Account;
 import com.example.springbank.model.Currency;
 import com.example.springbank.model.Customer;
@@ -66,6 +67,19 @@ public class CustomerService {
         }
 
         return false;
+    }
+
+    public Customer updateCustomer(long id, RequestCustomerCreateBody body) {
+        Customer customer = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        customer.setAge(body.getAge());
+        customer.setName(body.getName());
+        customer.setEmail(body.getEmail());
+
+        repository.save(customer);
+
+        return customer;
     }
 
     public void saveCustomer(Customer customer) {

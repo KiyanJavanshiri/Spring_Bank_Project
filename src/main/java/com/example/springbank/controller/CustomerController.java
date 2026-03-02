@@ -61,18 +61,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCustomer(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateBody body) {
-        Customer customer = customerService.getCustomer(id);
-
-        if(customer == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        customer.setAge(body.getAge());
-        customer.setName(body.getName());
-        customer.setEmail(body.getEmail());
-
-        customerService.saveCustomer(customer);
-
+        customerService.updateCustomer(id, body);
         return ResponseEntity.noContent().build();
     }
 }

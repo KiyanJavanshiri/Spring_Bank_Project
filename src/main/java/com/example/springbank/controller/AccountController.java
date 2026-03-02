@@ -32,9 +32,7 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        accountService.saveAccount(account);
-
-        return ResponseEntity.status(201).body(account);
+        return ResponseEntity.ok(account);
     }
 
     @PostMapping("/withdrawal")
@@ -45,24 +43,12 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        accountService.saveAccount(account);
-
-        return ResponseEntity.status(201).body(account);
+        return ResponseEntity.ok(account);
     }
 
     @PostMapping("/transfer")
     public ResponseEntity<Void> transfer(@Valid @RequestBody RequestAccountTransferBody body) {
-        Account withdrawalAccount = accountService.withdrawal(body.getFirstCardNumber(), body.getSum());
-
-        if(withdrawalAccount == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Account depositAccount = accountService.deposit(body.getSecondCardNumber(), body.getSum());
-
-        accountService.saveAccount(withdrawalAccount);
-        accountService.saveAccount(depositAccount);
-
-        return ResponseEntity.noContent().build();
+        boolean isSuccess = accountService.transfer(body.getFrom(), body.getTo(), body.getSum());
+        return isSuccess ? ResponseEntity.noContent().build() : ResponseEntity.badRequest().build();
     }
 }

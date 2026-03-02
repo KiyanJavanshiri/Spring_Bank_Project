@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Positive;
 
 public class RequestAccountTransferBody {
     @NotBlank
-    private String firstCardNumber;
+    private String from;
     @NotBlank
-    private String secondCardNumber;
+    private String to;
     @Positive
     private double sum;
 
@@ -19,19 +19,19 @@ public class RequestAccountTransferBody {
         this.sum = sum;
     }
 
-    public String getFirstCardNumber() {
-        return firstCardNumber;
+    public String getFrom() {
+        return from;
     }
 
-    public void setFirstCardNumber(String firstCardNumber) {
-        this.firstCardNumber = firstCardNumber;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getSecondCardNumber() {
-        return secondCardNumber;
+    public String getTo() {
+        return to;
     }
 
-    public void setSecondCardNumber(String secondCardNumber) {
-        this.secondCardNumber = secondCardNumber;
+    public void setTo(String to) {
+        this.to = to;
     }
 }
