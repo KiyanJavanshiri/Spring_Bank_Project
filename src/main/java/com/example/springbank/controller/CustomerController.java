@@ -17,7 +17,7 @@ import java.util.List;
 public class CustomerController {
     private CustomerService customerService;
 
-    public CustomerController(CustomerService customerService, AccountService accountService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
@@ -28,7 +28,10 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomer(@PathVariable long id) {
-        return ResponseEntity.ok(customerService.getCustomer(id));
+        Customer customer = customerService.getCustomer(id);
+        return customer == null
+                ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(customer);
     }
 
     @PostMapping
@@ -44,40 +47,16 @@ public class CustomerController {
     }
 
     @PostMapping("/{id}/account")
-    public ResponseEntity<String> createAccount(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateAccount body) {
-        Customer customer = customerService.getCustomer(id);
+    public ResponseEntity<String> createCustomerAccount(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateAccount body) {
+        Account createdAccount = customerService.createAccount(id, body.getCurrency());
 
-        if(customer == null) {
-            return ResponseEntity.badRequest().body("customer was not found");
-        }
-
-        customer.addAccount(new Account(body.getCurrency(), customer));
-        customerService.saveCustomer(customer);
-
-        return ResponseEntity.ok("Account created");
+        return createdAccount == null ? ResponseEntity.notFound().build() : ResponseEntity.status(201).body("Account created");
     }
 
     @DeleteMapping("/{id}/account/{accountId}")
     public ResponseEntity<String> deleteCustomerAccount(@PathVariable long id, @PathVariable long accountId) {
-        Customer customer = customerService.getCustomer(id);
-        if(customer == null) {
-            return ResponseEntity.status(404).body("Customer with id " + id + " was not found");
-        }
-
-        Account account = customer.getAccounts()
-                .stream()
-                .filter(a -> a.getId().equals(accountId))
-                .findFirst()
-                .orElse(null);
-
-        if(account == null) {
-            return ResponseEntity.status(404).body("Account with id " + accountId + " was not found for customer with id " + id);
-        }
-
-        customer.removeAccount(account);
-        customerService.saveCustomer(customer);
-
-        return ResponseEntity.noContent().build();
+        boolean isDeleted = customerService.deleteAccount(id, accountId);
+        return !isDeleted ? ResponseEntity.badRequest().build() : ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

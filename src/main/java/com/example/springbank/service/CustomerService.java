@@ -1,8 +1,11 @@
 package com.example.springbank.service;
 
 
+import com.example.springbank.model.Account;
+import com.example.springbank.model.Currency;
 import com.example.springbank.model.Customer;
 import com.example.springbank.repository.CustomerRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,15 +38,37 @@ public class CustomerService {
         repository.deleteById(id);
     }
 
+    public Account createAccount(Long customerId, Currency currency) {
+        Customer customer = repository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        Account account = new Account(currency, customer);
+        customer.addAccount(account);
+
+        repository.save(customer);
+
+        return account;
+    }
+
+    public boolean deleteAccount(Long customerId, Long accountId) {
+        Customer customer = repository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        Optional<Account> account = customer.getAccounts()
+                .stream()
+                .filter(a -> a.getId().equals(accountId))
+                .findFirst();
+
+        if (account.isPresent()) {
+            customer.removeAccount(account.get());
+            repository.save(customer);
+            return true;
+        }
+
+        return false;
+    }
+
     public void saveCustomer(Customer customer) {
         repository.save(customer);
     }
-
-//    public void changeCustomerData(long id) {
-//
-//    }
-
-//    public void createAccount(long id) {
-//
-//    }
 }
