@@ -1,11 +1,14 @@
 package com.example.springbank.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
+@Table(name = "customers")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +19,8 @@ public class Customer {
 
     private int age;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer", orphanRemoval = true)
+    @JsonManagedReference
     private List<Account> accounts = new ArrayList<>();
 
     public Customer() {}
@@ -25,6 +29,16 @@ public class Customer {
         this.name = name;
         this.email = email;
         this.age = age;
+    }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+        account.setCustomer(this);
+    }
+
+    public void removeAccount(Account account) {
+        accounts.remove(account);
+        account.setCustomer(null);
     }
 
     public Long getId() {
@@ -65,5 +79,28 @@ public class Customer {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return age == customer.age && Objects.equals(id, customer.id) && Objects.equals(name, customer.name) && Objects.equals(email, customer.email) && Objects.equals(accounts, customer.accounts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, age, accounts);
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", accounts=" + accounts +
+                '}';
     }
 }
