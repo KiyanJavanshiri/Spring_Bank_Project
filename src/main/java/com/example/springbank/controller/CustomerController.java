@@ -16,11 +16,9 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
     private CustomerService customerService;
-//    private AccountService accountService;
 
     public CustomerController(CustomerService customerService, AccountService accountService) {
         this.customerService = customerService;
-//        this.accountService = accountService;
     }
 
     @GetMapping
@@ -46,7 +44,7 @@ public class CustomerController {
     }
 
     @PostMapping("/{id}/account")
-    public ResponseEntity<String> createAccount(@PathVariable long id, @RequestBody RequestCustomerCreateAccount body) {
+    public ResponseEntity<String> createAccount(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateAccount body) {
         Customer customer = customerService.getCustomer(id);
 
         if(customer == null) {
@@ -77,6 +75,23 @@ public class CustomerController {
         }
 
         customer.removeAccount(account);
+        customerService.saveCustomer(customer);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateCustomer(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateBody body) {
+        Customer customer = customerService.getCustomer(id);
+
+        if(customer == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        customer.setAge(body.getAge());
+        customer.setName(body.getName());
+        customer.setEmail(body.getEmail());
+
         customerService.saveCustomer(customer);
 
         return ResponseEntity.noContent().build();
