@@ -54,7 +54,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}/account/{accountId}")
-    public ResponseEntity<String> deleteCustomerAccount(@PathVariable long id, @PathVariable long accountId) {
+    public ResponseEntity<Void> deleteCustomerAccount(@PathVariable long id, @PathVariable long accountId) {
         boolean isDeleted = customerService.deleteAccount(id, accountId);
         return !isDeleted ? ResponseEntity.badRequest().build() : ResponseEntity.noContent().build();
     }
