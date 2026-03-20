@@ -47,7 +47,7 @@ public class CustomerController {
     }
 
     @PostMapping("/{id}/account")
-    public ResponseEntity<String> createCustomerAccount(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateAccount body) {
+    public ResponseEntity<String> createCustomerAccount(@PathVariable long id, @Valid @RequestBody RequestCustomerCreateAccount body) {
         Account createdAccount = customerService.createAccount(id, body.getCurrency());
 
         return createdAccount == null ? ResponseEntity.notFound().build() : ResponseEntity.status(201).body("Account created");
@@ -60,8 +60,17 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCustomer(@PathVariable long id,@Valid @RequestBody RequestCustomerCreateBody body) {
+    public ResponseEntity<Void> updateCustomer(@PathVariable long id, @Valid @RequestBody RequestCustomerCreateBody body) {
         customerService.updateCustomer(id, body);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{customerId}/employers/{employerId}")
+    public ResponseEntity<Void> addEmployer(
+            @PathVariable Long customerId,
+            @PathVariable Long employerId) {
+
+        customerService.addEmployerToCustomer(customerId, employerId);
+        return ResponseEntity.ok().build();
     }
 }

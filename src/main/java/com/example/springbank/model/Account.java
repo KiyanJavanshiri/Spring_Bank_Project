@@ -9,11 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "accounts")
-public class Account {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@PrimaryKeyJoinColumn(name = "account_id")
+public class Account extends AbstractEntity {
     private String number;
 
     @Enumerated(EnumType.STRING)
@@ -34,14 +31,6 @@ public class Account {
         this.customer = customer;
         this.balance = (double) 0;
         this.number = UUID.randomUUID().toString();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNumber() {
@@ -80,12 +69,12 @@ public class Account {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(id, account.id) && Objects.equals(number, account.number) && currency == account.currency && Objects.equals(balance, account.balance) && Objects.equals(customer, account.customer);
+        return Objects.equals(super.getId(), account.getId()) && Objects.equals(number, account.number) && currency == account.currency && Objects.equals(balance, account.balance) && Objects.equals(customer, account.customer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, currency, balance, customer);
+        return Objects.hash(super.getId(), number, currency, balance, customer);
     }
 
     @Override
@@ -94,7 +83,7 @@ public class Account {
                 "balance=" + balance +
                 ", currency=" + currency +
                 ", number='" + number + '\'' +
-                ", id=" + id +
+                ", " + super.toString() +
                 '}';
     }
 }
