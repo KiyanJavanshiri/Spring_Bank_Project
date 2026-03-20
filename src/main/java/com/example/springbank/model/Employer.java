@@ -13,22 +13,22 @@ public class Employer extends AbstractEntity {
     @JsonIgnore
     @ManyToMany(mappedBy = "employers")
     private Set<Customer> customers = new HashSet<>();
-    private String company;
+    private String name;
     private String address;
 
     public Employer() {}
 
-    public Employer(String company, String address) {
-        this.company = company;
+    public Employer(String name, String address) {
+        this.name = name;
         this.address = address;
     }
 
-    public String getCompany() {
-        return company;
+    public String getName() {
+        return name;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -51,7 +51,7 @@ public class Employer extends AbstractEntity {
     public String toString() {
         return "Employer{" +
                 super.toString() +
-                ", company='" + company + '\'' +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 '}';
     }

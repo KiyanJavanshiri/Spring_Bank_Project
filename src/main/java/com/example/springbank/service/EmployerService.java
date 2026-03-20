@@ -26,7 +26,7 @@ public class EmployerService {
     }
 
     public Employer createEmployer(RequestEmployerCreateBody body) {
-        Employer employer = new Employer(body.getCompany(), body.getAddress());
+        Employer employer = new Employer(body.getName(), body.getAddress());
         repository.save(employer);
         return employer;
     }

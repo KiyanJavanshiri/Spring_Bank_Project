@@ -4,16 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 
 public class RequestEmployerCreateBody {
     @NotBlank
-    private String company;
+    private String name;
     @NotBlank
     private String address;
 
-    public String getCompany() {
-        return company;
+    public String getName() {
+        return name;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {

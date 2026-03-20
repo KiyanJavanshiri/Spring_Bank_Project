@@ -7,8 +7,8 @@ INSERT INTO abstract_entity (id) VALUES (5);
 INSERT INTO customers (id, name, email, age) VALUES (1, 'John', 'john@mail.com', 25);
 INSERT INTO customers (id, name, email, age) VALUES (2, 'Alice', 'alice@mail.com', 30);
 
-INSERT INTO employers (id, company, address) VALUES (3, 'Google', 'USA');
-INSERT INTO employers (id, company, address) VALUES (4, 'Amazon', 'USA');
+INSERT INTO employers (id, name, address) VALUES (3, 'Google', 'USA');
+INSERT INTO employers (id, name, address) VALUES (4, 'Amazon', 'USA');
 
 INSERT INTO abstract_entity (id) VALUES (6);
 INSERT INTO accounts (id, number, balance, currency, customer_id)
