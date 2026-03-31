@@ -11,6 +11,8 @@ import com.example.springbank.model.Employer;
 import com.example.springbank.repository.CustomerRepository;
 import com.example.springbank.repository.EmployerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +32,8 @@ public class CustomerService {
         return customer == null ? null : customerMapper.toResponse(customer);
     }
 
-    public List<CustomerResponse> getAllCustomers() {
-        return repository.findAll().stream()
+    public List<CustomerResponse> getAllCustomers(int page, int limit) {
+        return repository.findAll(PageRequest.of(page, limit)).stream()
                 .map(customerMapper::toResponse)
                 .collect(Collectors.toList());
     }
