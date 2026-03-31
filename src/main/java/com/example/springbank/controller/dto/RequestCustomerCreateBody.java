@@ -1,39 +1,22 @@
 package com.example.springbank.controller.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class RequestCustomerCreateBody {
-    @NotBlank
+    @Size(min = 2)
     private String name;
 
-    @NotBlank
+    @Email
     private String email;
 
+    @Pattern(regexp = "\\+?\\d{10,15}")
+    private String phoneNumber;
+
     @Positive
+    @Min(18)
     private int age;
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

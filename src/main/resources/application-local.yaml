@@ -1,7 +1,4 @@
 spring:
-  sql:
-    init:
-      mode: always
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
     driverClassName: org.h2.Driver
@@ -12,12 +9,12 @@ spring:
       database-platform: org.hibernate.dialect.H2Dialect
       defer-datasource-initialization: true
       hibernate:
-        ddl-auto: create
+        ddl-auto: create-drop
       show-sql: true
 
-      sql:
-        init:
-          mode: always
+    sql:
+      init:
+        mode: always
 
     h2:
       console:
