@@ -19,4 +19,6 @@ public class RequestCustomerCreateBody {
     @Positive
     @Min(18)
     private int age;
+
+    private String password;
 }

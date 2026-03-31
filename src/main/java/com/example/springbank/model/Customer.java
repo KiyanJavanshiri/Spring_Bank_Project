@@ -27,10 +27,12 @@ public class Customer extends AbstractEntity {
     @NonNull
     private String email;
 
+    @NonNull
     private String password;
 
     @EqualsAndHashCode.Include
     @ToString.Include
+    @NonNull
     private String phoneNumber;
 
     @EqualsAndHashCode.Include

@@ -1,5 +1,8 @@
 package com.example.springbank.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Currency {
     USD("Dollars"),
     EUR("Euro"),
@@ -11,9 +14,5 @@ public enum Currency {
 
     Currency(String currency) {
         this.currency = currency;
-    }
-
-    public String getCurrency() {
-        return currency;
     }
 }

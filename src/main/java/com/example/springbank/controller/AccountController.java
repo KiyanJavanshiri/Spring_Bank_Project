@@ -1,10 +1,12 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.controller.dto.AccountResponse;
 import com.example.springbank.controller.dto.RequestAccountTransactionBody;
 import com.example.springbank.controller.dto.RequestAccountTransferBody;
 import com.example.springbank.model.Account;
 import com.example.springbank.service.AccountService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
+@AllArgsConstructor
 public class AccountController {
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
-
     @GetMapping
-    public ResponseEntity<List<Account>> getAccounts() {
+    public ResponseEntity<List<AccountResponse>> getAccounts() {
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<Account> depositAccount(@Valid @RequestBody RequestAccountTransactionBody body) {
-        Account account = accountService.deposit(body.getNumber(), body.getSum());
+    public ResponseEntity<AccountResponse> depositAccount(@Valid @RequestBody RequestAccountTransactionBody body) {
+        AccountResponse account = accountService.deposit(body.getNumber(), body.getSum());
 
         if (account == null) {
             return ResponseEntity.badRequest().build();
@@ -36,8 +35,8 @@ public class AccountController {
     }
 
     @PostMapping("/withdrawal")
-    public ResponseEntity<Account> withdrawalAccount(@Valid @RequestBody RequestAccountTransactionBody body) {
-        Account account = accountService.withdrawal(body.getNumber(), body.getSum());
+    public ResponseEntity<AccountResponse> withdrawalAccount(@Valid @RequestBody RequestAccountTransactionBody body) {
+        AccountResponse account = accountService.withdrawal(body.getNumber(), body.getSum());
 
         if (account == null) {
             return ResponseEntity.badRequest().build();

@@ -1,42 +1,45 @@
 package com.example.springbank.service;
 
 
+import com.example.springbank.controller.dto.CustomerResponse;
 import com.example.springbank.controller.dto.RequestCustomerCreateBody;
+import com.example.springbank.mapper.CustomerMapper;
 import com.example.springbank.model.Account;
 import com.example.springbank.model.Currency;
 import com.example.springbank.model.Customer;
 import com.example.springbank.model.Employer;
 import com.example.springbank.repository.CustomerRepository;
 import com.example.springbank.repository.EmployerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CustomerService {
     private CustomerRepository repository;
     private EmployerRepository employerRepository;
+    private CustomerMapper customerMapper;
 
-    public CustomerService(CustomerRepository repository, EmployerRepository employerRepository) {
-        this.repository = repository;
-        this.employerRepository = employerRepository;
+    public CustomerResponse getCustomer(long id) {
+        Customer customer = repository.findById(id).orElse(null);
+        return customer == null ? null : customerMapper.toResponse(customer);
     }
 
-    public Customer getCustomer(long id) {
-        Optional<Customer> customer = repository.findById(id);
-        return customer.orElse(null);
+    public List<CustomerResponse> getAllCustomers() {
+        return repository.findAll().stream()
+                .map(customerMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
-    public List<Customer> getAllCustomers() {
-        return repository.findAll();
-    }
-
-    public Customer createCustomer(String name, String email, int age) {
-        Customer customer = new Customer(name, email, age);
+    public CustomerResponse createCustomer(String name, String email, int age, String password, String phoneNumber) {
+        Customer customer = new Customer(name, email, password, phoneNumber, age);
         repository.save(customer);
-        return customer;
+        return customerMapper.toResponse(customer);
     }
 
     public void deleteCustomer(long id) {
@@ -73,7 +76,7 @@ public class CustomerService {
         return false;
     }
 
-    public Customer updateCustomer(long id, RequestCustomerCreateBody body) {
+    public CustomerResponse updateCustomer(long id, RequestCustomerCreateBody body) {
         Customer customer = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -83,7 +86,7 @@ public class CustomerService {
 
         repository.save(customer);
 
-        return customer;
+        return customerMapper.toResponse(customer);
     }
 
     public void addEmployerToCustomer(Long customerId, Long employerId) {

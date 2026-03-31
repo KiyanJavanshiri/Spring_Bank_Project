@@ -1,5 +1,6 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.controller.dto.CustomerResponse;
 import com.example.springbank.controller.dto.RequestCustomerCreateAccount;
 import com.example.springbank.controller.dto.RequestCustomerCreateBody;
 import com.example.springbank.model.Account;
@@ -7,6 +8,7 @@ import com.example.springbank.model.Customer;
 import com.example.springbank.service.AccountService;
 import com.example.springbank.service.CustomerService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,29 +16,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@AllArgsConstructor
 public class CustomerController {
     private CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
-
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
+    public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable long id) {
-        Customer customer = customerService.getCustomer(id);
+    public ResponseEntity<CustomerResponse> getCustomer(@PathVariable long id) {
+        CustomerResponse customer = customerService.getCustomer(id);
         return customer == null
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(customer);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody RequestCustomerCreateBody body) {
-        Customer createdCustomer = customerService.createCustomer(body.getName(), body.getEmail(), body.getAge());
+    public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody RequestCustomerCreateBody body) {
+        CustomerResponse createdCustomer = customerService.createCustomer(body.getName(), body.getEmail(),body.getAge(), body.getPhoneNumber(), body.getPassword());
         return ResponseEntity.status(201).body(createdCustomer);
     }
 

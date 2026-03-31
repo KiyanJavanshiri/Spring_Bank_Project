@@ -2,7 +2,7 @@ package com.example.springbank.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -10,80 +10,25 @@ import java.util.UUID;
 @Entity
 @Table(name = "accounts")
 @PrimaryKeyJoinColumn(name = "account_id")
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class Account extends AbstractEntity {
-    private String number;
+    private String number = UUID.randomUUID().toString();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NonNull
     private Currency currency;
 
-    private Double balance;
+    private Double balance = (double) 0;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonBackReference
+    @NonNull
     private Customer customer;
-
-    public Account() {}
-
-    public Account(Currency currency, Customer customer) {
-        this.currency = currency;
-        this.customer = customer;
-        this.balance = (double) 0;
-        this.number = UUID.randomUUID().toString();
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return Objects.equals(super.getId(), account.getId()) && Objects.equals(number, account.number) && currency == account.currency && Objects.equals(balance, account.balance) && Objects.equals(customer, account.customer);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.getId(), number, currency, balance, customer);
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "balance=" + balance +
-                ", currency=" + currency +
-                ", number='" + number + '\'' +
-                ", " + super.toString() +
-                '}';
-    }
 }

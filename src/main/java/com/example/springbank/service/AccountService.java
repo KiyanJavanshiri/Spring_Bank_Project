@@ -1,29 +1,32 @@
 package com.example.springbank.service;
 
+import com.example.springbank.controller.dto.AccountResponse;
+import com.example.springbank.mapper.AccountMapper;
 import com.example.springbank.model.Account;
 import com.example.springbank.repository.AccountRepository;
 import com.example.springbank.repository.CustomerRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+    private AccountMapper accountMapper;
 
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
+    public AccountResponse getAccount(long id) {
+        Account account = accountRepository.findById(id).orElse(null);
+        return account == null ? null : accountMapper.toResponse(account);
     }
 
-    public Account getAccount(long id) {
-        return accountRepository.findById(id).orElse(null);
+    public List<AccountResponse> getAllAccounts() {
+        return accountRepository.findAll().stream().map(accountMapper::toResponse).collect(Collectors.toList());
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
-
-    public Account deposit(String number, double sum) {
+    public AccountResponse deposit(String number, double sum) {
         Account account = accountRepository.findByNumber(number).orElse(null);
 
         if(account == null) {
@@ -32,10 +35,10 @@ public class AccountService {
 
         account.setBalance(account.getBalance() + sum);
         accountRepository.save(account);
-        return account;
+        return accountMapper.toResponse(account);
     }
 
-    public Account withdrawal(String number, double sum) {
+    public AccountResponse withdrawal(String number, double sum) {
         Account account = accountRepository.findByNumber(number).orElse(null);
 
         if(account == null || account.getBalance() < sum) {
@@ -44,7 +47,7 @@ public class AccountService {
 
         account.setBalance(account.getBalance() - sum);
         accountRepository.save(account);
-        return account;
+        return accountMapper.toResponse(account);
     }
 
     public boolean transfer(String from, String to, double sum) {
