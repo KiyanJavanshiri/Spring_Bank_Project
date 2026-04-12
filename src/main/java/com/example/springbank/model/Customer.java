@@ -3,6 +3,8 @@ package com.example.springbank.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
@@ -15,7 +17,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @ToString(callSuper = true, onlyExplicitlyIncluded = true)
-public class Customer extends AbstractEntity {
+public class Customer extends AbstractEntity implements UserDetails {
 
     @EqualsAndHashCode.Include
     @ToString.Include
@@ -25,9 +27,11 @@ public class Customer extends AbstractEntity {
     @EqualsAndHashCode.Include
     @ToString.Include
     @NonNull
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NonNull
+    @Column(nullable = false)
     private String password;
 
     @EqualsAndHashCode.Include
@@ -62,5 +66,35 @@ public class Customer extends AbstractEntity {
     public void removeAccount(Account account) {
         accounts.remove(account);
         account.setCustomer(null);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
