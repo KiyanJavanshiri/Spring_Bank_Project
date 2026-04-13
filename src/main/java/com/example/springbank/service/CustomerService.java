@@ -78,7 +78,7 @@ public class CustomerService {
         return false;
     }
 
-    public CustomerResponse updateCustomer(long id, RequestCustomerCreateBody body) {
+    public void updateCustomer(long id, RequestCustomerCreateBody body) {
         Customer customer = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -87,8 +87,6 @@ public class CustomerService {
         customer.setEmail(body.getEmail());
 
         repository.save(customer);
-
-        return customerMapper.toResponse(customer);
     }
 
     public void addEmployerToCustomer(Long customerId, Long employerId) {

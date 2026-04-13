@@ -26,9 +26,8 @@ public class EmployerService {
         return employer == null ? null : employerMapper.toResponse(employer);
     }
 
-    public EmployerResponse createEmployer(RequestEmployerCreateBody body) {
+    public void createEmployer(RequestEmployerCreateBody body) {
         Employer employer = new Employer(body.getName(), body.getAddress());
         repository.save(employer);
-        return employerMapper.toResponse(employer);
     }
 }

@@ -65,7 +65,7 @@ public class Customer extends AbstractEntity implements UserDetails {
 
     public void removeAccount(Account account) {
         accounts.remove(account);
-        account.setCustomer(null);
+//        account.setCustomer(null);
     }
 
     @Override
