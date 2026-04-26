@@ -1,5 +1,6 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.annotation.LogController;
 import com.example.springbank.controller.dto.AuthResponse;
 import com.example.springbank.controller.dto.RequestAuthLoginBody;
 import com.example.springbank.controller.dto.RequestCustomerCreateBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@LogController
 @RestController()
 @RequestMapping("/auth")
 @RequiredArgsConstructor

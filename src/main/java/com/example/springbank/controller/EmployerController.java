@@ -1,5 +1,6 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.annotation.LogController;
 import com.example.springbank.controller.dto.EmployerResponse;
 import com.example.springbank.controller.dto.RequestEmployerCreateBody;
 import com.example.springbank.service.EmployerService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@LogController
 @RestController
 @RequestMapping("/employers")
 @AllArgsConstructor

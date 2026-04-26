@@ -1,5 +1,6 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.annotation.LogController;
 import com.example.springbank.controller.dto.CustomerResponse;
 import com.example.springbank.controller.dto.RequestCustomerCreateAccount;
 import com.example.springbank.controller.dto.RequestCustomerCreateBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@LogController
 @RestController
 @RequestMapping("/customers")
 @AllArgsConstructor

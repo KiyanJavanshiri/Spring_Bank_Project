@@ -1,5 +1,6 @@
 package com.example.springbank.controller;
 
+import com.example.springbank.annotation.LogController;
 import com.example.springbank.controller.dto.AccountResponse;
 import com.example.springbank.controller.dto.RequestAccountTransactionBody;
 import com.example.springbank.controller.dto.RequestAccountTransferBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@LogController
 @RestController
 @RequestMapping("/accounts")
 @AllArgsConstructor
