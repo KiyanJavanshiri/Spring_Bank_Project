@@ -4,7 +4,6 @@ import com.example.springbank.controller.dto.AccountResponse;
 import com.example.springbank.mapper.AccountMapper;
 import com.example.springbank.model.Account;
 import com.example.springbank.repository.AccountRepository;
-import com.example.springbank.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final AccountWebSocketService accountWebSocketService;
     private AccountMapper accountMapper;
 
     public AccountResponse getAccount(long id) {
@@ -35,7 +35,14 @@ public class AccountService {
 
         account.setBalance(account.getBalance() + sum);
         accountRepository.save(account);
-        return accountMapper.toResponse(account);
+
+        AccountResponse response = accountMapper.toResponse(account);
+
+        accountWebSocketService.sendBalanceUpdate(
+                account.getCustomer().getId(),
+                "Balance updated: " + response.getNumber() + " = " + response.getBalance()
+        );
+        return response;
     }
 
     public AccountResponse withdrawal(String number, double sum) {
@@ -47,7 +54,14 @@ public class AccountService {
 
         account.setBalance(account.getBalance() - sum);
         accountRepository.save(account);
-        return accountMapper.toResponse(account);
+
+        AccountResponse response = accountMapper.toResponse(account);
+
+        accountWebSocketService.sendBalanceUpdate(
+                account.getCustomer().getId(),
+                "Balance updated: " + response.getNumber() + " = " + response.getBalance()
+        );
+        return response;
     }
 
     public boolean transfer(String from, String to, double sum) {
@@ -62,6 +76,16 @@ public class AccountService {
 
         accountRepository.save(fromAcc);
         accountRepository.save(toAcc);
+
+        accountWebSocketService.sendBalanceUpdate(
+                fromAcc.getCustomer().getId(),
+                "TRANSFER OUT: -" + sum
+        );
+
+        accountWebSocketService.sendBalanceUpdate(
+                toAcc.getCustomer().getId(),
+                "TRANSFER IN: +" + sum
+        );
 
         return true;
     }
